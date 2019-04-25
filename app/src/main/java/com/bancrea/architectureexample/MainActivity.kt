@@ -2,6 +2,7 @@ package com.bancrea.architectureexample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,8 +16,8 @@ class MainActivity : AppCompatActivity() {
             ViewModelProviders.of(this).get(NoteViewModel::class.java)
         }
 
-        noteViewModel.allNotes.observe(this, Observer { note ->
-
+        noteViewModel.allNotes.observe(this, Observer {
+            Toast.makeText(this,"onChange",Toast.LENGTH_LONG).show()
         })
     }
 }
