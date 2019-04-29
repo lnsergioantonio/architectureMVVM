@@ -9,7 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class NoteViewModel(application: Application) : AndroidViewModel(application) {
+class NoteViewModel (application: Application) : AndroidViewModel(application) {
     private var parentjob=Job()
     private val coroutineContext : CoroutineContext get() = parentjob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)

@@ -6,18 +6,24 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val noteViewModel by lazy {
-            ViewModelProviders.of(this).get(NoteViewModel::class.java)
-        }
+        val adapter = NoteAdapter()
+        val recycler : RecyclerView = findViewById(R.id.recycler)
+        recycler.adapter = adapter
 
-        noteViewModel.allNotes.observe(this, Observer {
-            Toast.makeText(this,"onChange",Toast.LENGTH_LONG).show()
+        val noteViewModel = ViewModelProviders.of(this).get(NoteViewModel(application)::class.java)
+
+        noteViewModel.allNotes.observe(this, Observer { notes ->
+            adapter.setNotes(notes)
         })
+
+
+
     }
 }
