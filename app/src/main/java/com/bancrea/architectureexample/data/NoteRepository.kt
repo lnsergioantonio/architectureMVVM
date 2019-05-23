@@ -1,26 +1,27 @@
-package com.bancrea.architectureexample
+package com.bancrea.architectureexample.data
 
-import android.app.Application
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import com.bancrea.architectureexample.data.db.Note
+import com.bancrea.architectureexample.data.db.NoteDao
 import kotlinx.coroutines.*
 
-class NoteRepository(private val notedao:NoteDao){
+class NoteRepository(private val notedao: NoteDao){
 
     var allNotes:LiveData<List<Note>> = notedao.getAllNotes()
 
     @WorkerThread
-    suspend fun insert(note:Note){
+    suspend fun insert(note: Note){
         notedao.insert(note)
     }
     @WorkerThread
-    fun update(note:Note){
+    fun update(note: Note){
         GlobalScope.launch {
             notedao.update(note)
         }
     }
     @WorkerThread
-    fun delete(note:Note){
+    fun delete(note: Note){
         GlobalScope.launch {
             notedao.delete(note)
         }

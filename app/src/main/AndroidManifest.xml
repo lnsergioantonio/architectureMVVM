@@ -10,7 +10,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.noteList.NoteList"
             android:launchMode="singleTop"
             >
             <intent-filter>
@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".AddNoteActivity"
-            android:parentActivityName=".MainActivity">
+                android:name=".ui.formNote.FormNote"
+            android:parentActivityName=".ui.noteList.NoteList">
         </activity>
     </application>
 

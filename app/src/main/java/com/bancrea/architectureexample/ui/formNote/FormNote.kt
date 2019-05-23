@@ -1,16 +1,16 @@
-package com.bancrea.architectureexample
+package com.bancrea.architectureexample.ui.formNote
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.bancrea.architectureexample.R
 import com.google.android.material.textfield.TextInputEditText
 
-class AddNoteActivity : AppCompatActivity() {
+class FormNote : AppCompatActivity() {
     companion object{
         val EXTRA_ID = "ID"
         val EXTRA_TITLE="TITLE"
@@ -67,7 +67,9 @@ class AddNoteActivity : AppCompatActivity() {
 
         val data = Intent()
         if(intent.hasExtra(EXTRA_ID))
-            data.putExtra(EXTRA_ID,intent.getIntExtra(EXTRA_ID,-1))
+            data.putExtra(
+                EXTRA_ID,intent.getIntExtra(
+                    EXTRA_ID,-1))
 
         data.putExtra(EXTRA_TITLE,mTitle)
         data.putExtra(EXTRA_DESCRIPTION,mDescription)

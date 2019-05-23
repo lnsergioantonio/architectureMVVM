@@ -1,4 +1,4 @@
-package com.bancrea.architectureexample
+package com.bancrea.architectureexample.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,4 +1,4 @@
-package com.bancrea.architectureexample
+package com.bancrea.architectureexample.ui.noteList
 
 import android.app.Activity
 import android.content.Intent
@@ -6,21 +6,23 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.bancrea.architectureexample.R
+import com.bancrea.architectureexample.data.db.Note
+import com.bancrea.architectureexample.ui.formNote.FormNote
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class NoteList : AppCompatActivity() {
     companion object{
         private val ADD_NOTE_REQUEST = 1
         private val UPDATE_NOTE_REQUEST = 2
     }
-    private lateinit var noteViewModel:NoteViewModel
+    private lateinit var noteViewModel: NoteViewModel
     private val adapter = NoteAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,27 +31,32 @@ class MainActivity : AppCompatActivity() {
         val recycler : RecyclerView = findViewById(R.id.recycler)
             recycler.adapter = adapter
 
-        adapter.listener = object: NoteAdapter.OnInteractorListener{
+        adapter.listener = object: NoteAdapter.OnInteractorListener {
             override fun onItemClic(note: Note) {
-                val intent = Intent(applicationContext, AddNoteActivity::class.java)
-                intent.putExtra(AddNoteActivity.EXTRA_ID,note.id)
-                intent.putExtra(AddNoteActivity.EXTRA_DESCRIPTION,note.description)
-                intent.putExtra(AddNoteActivity.EXTRA_NUMBER,note.priority)
-                intent.putExtra(AddNoteActivity.EXTRA_TITLE,note.title)
+                val intent = Intent(applicationContext, FormNote::class.java)
+                intent.putExtra(FormNote.EXTRA_ID,note.id)
+                intent.putExtra(FormNote.EXTRA_DESCRIPTION,note.description)
+                intent.putExtra(FormNote.EXTRA_NUMBER,note.priority)
+                intent.putExtra(FormNote.EXTRA_TITLE,note.title)
 
                 startActivityForResult(intent, UPDATE_NOTE_REQUEST)
             }
         }
 
-        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel(application)::class.java)
+        noteViewModel = ViewModelProviders.of(this).get(
+            NoteViewModel(
+                application
+            )::class.java)
         noteViewModel.allNotes.observe(this, Observer { notes ->
             adapter.setNotes(notes)
         })
 
         val fab:FloatingActionButton = findViewById(R.id.floatingActionButton)
         fab.setOnClickListener {
-            val intent = Intent(this,AddNoteActivity::class.java)
-            startActivityForResult(intent, ADD_NOTE_REQUEST)
+            val intent = Intent(this, FormNote::class.java)
+            startActivityForResult(intent,
+                ADD_NOTE_REQUEST
+            )
         }
         ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT ){
             override fun onMove(
@@ -70,25 +77,25 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode==ADD_NOTE_REQUEST && resultCode== Activity.RESULT_OK){
+        if (requestCode== ADD_NOTE_REQUEST && resultCode== Activity.RESULT_OK){
             if(data!=null){
                 val note = Note()
-                note.title = data.getStringExtra(AddNoteActivity.EXTRA_TITLE)
-                note.description = data.getStringExtra(AddNoteActivity.EXTRA_DESCRIPTION)
-                note.priority = data.getIntExtra(AddNoteActivity.EXTRA_NUMBER,0)
+                note.title = data.getStringExtra(FormNote.EXTRA_TITLE)
+                note.description = data.getStringExtra(FormNote.EXTRA_DESCRIPTION)
+                note.priority = data.getIntExtra(FormNote.EXTRA_NUMBER,0)
 
                 noteViewModel.insert(note)
             }
         }else if (requestCode== UPDATE_NOTE_REQUEST && resultCode== Activity.RESULT_OK){
             if(data!=null){
-                val id = data.getIntExtra(AddNoteActivity.EXTRA_ID,-1)
+                val id = data.getIntExtra(FormNote.EXTRA_ID,-1)
                 if(id!=-1){
                     val note = Note(
-                                    id,
-                                    data.getStringExtra(AddNoteActivity.EXTRA_TITLE),
-                                    data.getStringExtra(AddNoteActivity.EXTRA_DESCRIPTION),
-                                    data.getIntExtra(AddNoteActivity.EXTRA_NUMBER,0)
-                                )
+                        id,
+                        data.getStringExtra(FormNote.EXTRA_TITLE),
+                        data.getStringExtra(FormNote.EXTRA_DESCRIPTION),
+                        data.getIntExtra(FormNote.EXTRA_NUMBER, 0)
+                    )
                     noteViewModel.update(note)
                     Toast.makeText(this,"Note updated",Toast.LENGTH_LONG).show()
                 }
