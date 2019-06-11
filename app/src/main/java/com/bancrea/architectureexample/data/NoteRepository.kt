@@ -11,8 +11,10 @@ class NoteRepository(private val notedao: NoteDao){
     var allNotes:LiveData<List<Note>> = notedao.getAllNotes()
 
     @WorkerThread
-    suspend fun insert(note: Note){
-        notedao.insert(note)
+    fun insert(note: Note){
+        GlobalScope.launch {
+            notedao.insert(note)
+        }
     }
     @WorkerThread
     fun update(note: Note){

@@ -13,9 +13,6 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class NoteViewModel (application: Application) : AndroidViewModel(application) {
-    private var parentjob=Job()
-    private val coroutineContext : CoroutineContext get() = parentjob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
 
     private var repository: NoteRepository
     val allNotes:LiveData<List<Note>>
@@ -26,24 +23,11 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
         allNotes = repository.allNotes
     }
 
-    fun insert(note: Note) = scope.launch(Dispatchers.IO){
-        repository.insert(note)
-    }
+    fun insert(note: Note) = repository.insert(note)
 
-    fun update(note: Note){
-        repository.update(note)
-    }
+    fun update(note: Note) = repository.update(note)
 
-    fun delete(note: Note){
-        repository.delete(note)
-    }
+    fun delete(note: Note) = repository.delete(note)
 
-    fun deleteAll(){
-        repository.deleteAll()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        parentjob.cancel()
-    }
+    fun deleteAll() = repository.deleteAll()
 }
